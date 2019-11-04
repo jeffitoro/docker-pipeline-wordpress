@@ -1,23 +1,15 @@
 stages:
-- name: Deploy mysql
+- name: Deploy db
   steps:
   - applyYamlConfig:
-      path: ./deployment/db/db1-mysql.yaml
-timeout: 60
-notification: {}
-
-stages:
+      path: ./deployment/db/db-mysql.yaml
 - name: Deploy phpmyadmin
   steps:
   - applyYamlConfig:
-      path: ./deployment/phpmyadminadmin-mysql.yaml
-timeout: 60
-notification: {}
-
-stages:
+      path: ./deployment/phpmyadmin/admin-mysql.yaml
 - name: Deploy wordpress
   steps:
   - applyYamlConfig:
-      path: ./deployment/wordpress/wp-1.yaml
+      path: ./deployment/wordpress/wp.yaml
 timeout: 60
 notification: {}
