@@ -1,67 +1,65 @@
 apiVersion: v1
 kind: Service
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.19.0 (f63a961c)
-  creationTimestamp: null
+  name: wordpress-mysql
   labels:
-    io.kompose.service: db
-  name: db
+    app: wordpress
 spec:
   ports:
-  - name: "3306"
-    port: 3306
-    targetPort: 80
+    - port: 3306
   selector:
-    io.kompose.service: db
-status:
-  loadBalancer: {}
+    app: wordpress
+    tier: mysql
+  clusterIP: None
 ---
-apiVersion: extensions/v1beta1
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pv-claim
+  labels:
+    app: wordpress
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert
-    kompose.version: 1.19.0 (f63a961c)
-  creationTimestamp: null
+  name: wordpress-mysql
   labels:
-    io.kompose.service: db
-  name: db
+    app: wordpress
 spec:
-  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+      tier: mysql
   strategy:
     type: Recreate
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert
-        kompose.version: 1.19.0 (f63a961c)
-      creationTimestamp: null
       labels:
-        io.kompose.service: db
+        app: wordpress
+        tier: mysql
     spec:
       containers:
-      - env:
-        - name: MYSQL_DATABASE
-          value: wordpress
-        - name: MYSQL_PASSWORD
-          value: wordpress
+      - image: mysql:5.7
+        name: mysql
+        env:
         - name: MYSQL_ROOT_PASSWORD
-          value: root
-        - name: MYSQL_USER
-          value: wordpress
-        image: mysql:5.7
-        name: db
+          valueFrom:
+            secretKeyRef:
+              name: mysql-pass
+              key: password
         ports:
-        - containerPort: 80
-        resources: {}
+        - containerPort: 3306
+          name: mysql
         volumeMounts:
-        - mountPath: /var/lib/mysql
-          name: db-claim0
-      restartPolicy: Always
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
       volumes:
-      - name: db-claim0
+      - name: mysql-persistent-storage
         persistentVolumeClaim:
-          claimName: db-claim0
-status: {}
+          claimName: mysql-pv-claim

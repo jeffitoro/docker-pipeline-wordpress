@@ -21,6 +21,7 @@ status:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  namespace: geek 
   annotations:
     kompose.cmd: kompose convert
     kompose.version: 1.19.0 (f63a961c)
