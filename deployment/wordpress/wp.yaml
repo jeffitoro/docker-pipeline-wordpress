@@ -65,18 +65,3 @@ spec:
         persistentVolumeClaim:
           claimName: wordpress-claim0
 status: {}
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  creationTimestamp: null
-  labels:
-    io.kompose.service: wordpress-claim0
-  name: wordpress-claim0
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Mi
-status: {}

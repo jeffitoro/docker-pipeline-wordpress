@@ -65,18 +65,3 @@ spec:
         persistentVolumeClaim:
           claimName: db-claim0
 status: {}
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  creationTimestamp: null
-  labels:
-    io.kompose.service: db-claim0
-  name: db-claim0
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 100Mi
-status: {}
