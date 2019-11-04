@@ -5,7 +5,7 @@ stages:
       dockerfilePath: ./docker/wordpress/Dockerfile
       buildContext: .
       tag: wp:${CICD_EXECUTION_SEQUENCE}
-      registry: 127.0.0.1:34949
+      registry: DockerHub
 - name: Deploy
   steps:
   - applyYamlConfig:
