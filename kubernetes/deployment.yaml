@@ -4,7 +4,7 @@ items:
   kind: Service
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o ./kubernetes/deployment.yaml
+      kompose.cmd: kompose convert -o deployment.yaml
       kompose.version: 1.19.0 (f63a961c)
     creationTimestamp: null
     labels:
@@ -23,7 +23,7 @@ items:
   kind: Service
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o ./kubernetes/deployment.yaml
+      kompose.cmd: kompose convert -o deployment.yaml
       kompose.version: 1.19.0 (f63a961c)
     creationTimestamp: null
     labels:
@@ -42,7 +42,7 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o ./kubernetes/deployment.yaml
+      kompose.cmd: kompose convert -o deployment.yaml
       kompose.version: 1.19.0 (f63a961c)
     creationTimestamp: null
     labels:
@@ -55,7 +55,7 @@ items:
     template:
       metadata:
         annotations:
-          kompose.cmd: kompose convert -o ./kubernetes/deployment.yaml
+          kompose.cmd: kompose convert -o deployment.yaml
           kompose.version: 1.19.0 (f63a961c)
         creationTimestamp: null
         labels:
@@ -71,13 +71,8 @@ items:
             value: root
           - name: MYSQL_USER
             value: wordpress
-          image: mysql:5.7.14
-          failureThreshold: 3
+          image: mysql:5.7
           name: db
-          ports:
-            - containerPort: 3306
-              name: mysql
-              protocol: TCP
           resources: {}
           volumeMounts:
           - mountPath: /var/lib/mysql
@@ -106,7 +101,7 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o ./kubernetes/deployment.yaml
+      kompose.cmd: kompose convert -o deployment.yaml
       kompose.version: 1.19.0 (f63a961c)
     creationTimestamp: null
     labels:
@@ -118,7 +113,7 @@ items:
     template:
       metadata:
         annotations:
-          kompose.cmd: kompose convert -o ./kubernetes/deployment.yaml
+          kompose.cmd: kompose convert -o deployment.yaml
           kompose.version: 1.19.0 (f63a961c)
         creationTimestamp: null
         labels:
@@ -141,7 +136,7 @@ items:
   kind: Deployment
   metadata:
     annotations:
-      kompose.cmd: kompose convert -o ./kubernetes/deployment.yaml
+      kompose.cmd: kompose convert -o deployment.yaml
       kompose.version: 1.19.0 (f63a961c)
     creationTimestamp: null
     labels:
@@ -154,7 +149,7 @@ items:
     template:
       metadata:
         annotations:
-          kompose.cmd: kompose convert -o ./kubernetes/deployment.yaml
+          kompose.cmd: kompose convert -o deployment.yaml
           kompose.version: 1.19.0 (f63a961c)
         creationTimestamp: null
         labels:
@@ -176,18 +171,13 @@ items:
           - containerPort: 80
           resources: {}
           volumeMounts:
-          - mountPath: /usr/local/etc/php/conf.d/conf.ini
-            name: wp-claim0
           - mountPath: /var/www/html
-            name: wp-claim1
+            name: wp-claim0
         restartPolicy: Always
         volumes:
         - name: wp-claim0
           persistentVolumeClaim:
             claimName: wp-claim0
-        - name: wp-claim1
-          persistentVolumeClaim:
-            claimName: wp-claim1
   status: {}
 - apiVersion: v1
   kind: PersistentVolumeClaim
@@ -196,20 +186,6 @@ items:
     labels:
       io.kompose.service: wp-claim0
     name: wp-claim0
-  spec:
-    accessModes:
-    - ReadWriteOnce
-    resources:
-      requests:
-        storage: 100Mi
-  status: {}
-- apiVersion: v1
-  kind: PersistentVolumeClaim
-  metadata:
-    creationTimestamp: null
-    labels:
-      io.kompose.service: wp-claim1
-    name: wp-claim1
   spec:
     accessModes:
     - ReadWriteOnce
