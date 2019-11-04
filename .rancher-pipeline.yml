@@ -3,10 +3,6 @@ stages:
   steps:
   - applyYamlConfig:
       path: ./deployment/db/db-mysql.yaml
-- name: Deploy phpmyadmin
-  steps:
-  - applyYamlConfig:
-      path: ./deployment/phpmyadmin/admin-mysql.yaml
 - name: Deploy wordpress
   steps:
   - applyYamlConfig:
